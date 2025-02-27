@@ -1,67 +1,84 @@
-/*
-
-*/
-namespace connect4;
-class Menu
+namespace Connect4
 {
-
-    public static void Titre()
+    /// <summary>
+    /// Classe responsable de l'affichage des éléments graphiques du jeu
+    /// </summary>
+    class Menu
     {
-        const string TITRE = "Connect 4 par Zachary Dubois";
-        const int TAB_NUM = 4;
-        const char TAB_CHAR = ' ';
-        const char SEP_CHAR = '-';
-        string tab = new string(TAB_CHAR, TAB_NUM);
-        string sep = new string(SEP_CHAR, TAB_NUM + TITRE.Length + TAB_NUM);
-        
-        Console.WriteLine(sep);
-        Console.WriteLine($"{tab}{TITRE}{tab}");
-        Console.WriteLine(sep);
-    }
-
-    public static void Grille()
-    {
-        const char CHAR_HOR = '-';
-        const char CHAR_VER = '|';
-        const char ESPACE = ' ';
-        const int COL_NUM = 7; // 7 columns
-        const int RAN_NUM = 6; // 6 rows
-
-        char[] tableau = new char[42];
-
-        for (int i = 0; i < tableau.Length; i++)
+        /// <summary>
+        /// Affiche le titre du jeu avec la signature du développeur
+        /// </summary>
+        public static void AfficherTitre()
         {
-            tableau[i] = ESPACE;
+            const string TitreJeu = "Connect 4 par Zachary Dubois";
+            const int NombreTabulations = 4;
+            const char CaractereTabulation = ' ';
+            const char CaractereSeparation = '-';
+            
+            string tabulations = new string(CaractereTabulation, NombreTabulations);
+            string separation = new string(CaractereSeparation, TitreJeu.Length + (NombreTabulations * 2));
+            
+            Console.WriteLine(separation);
+            Console.WriteLine($"{tabulations}{TitreJeu}{tabulations}");
+            Console.WriteLine(separation);
         }
 
-        int iterations = 0;
-        // Print the grid
-        for (int i = 0; i < RAN_NUM; i++)
+        /// <summary>
+        /// Affiche la grille de jeu actuelle
+        /// </summary>
+        /// <param name="grille">Tableau 2D représentant l'état du jeu</param>
+        public static void AfficherGrille(char[,] grille)
         {
-            // Print the top separator line (horizontal line between rows)
-            for (int j = 0; j < COL_NUM; j++)
+            const char CharHorizontal = '-';
+            const char CharVertical = '|';
+            const char Espace = ' ';
+            
+            int nombreColonnes = grille.GetLength(1);
+            int nombreRangees = grille.GetLength(0);
+
+            // Affichage des en-têtes de colonnes (A-G)
+            for (int i = 0; i < nombreColonnes; i++)
             {
-                Console.Write($"{CHAR_HOR}{CHAR_HOR}{CHAR_HOR}"); // Horizontal bars
+                Console.Write($"{Espace}{(char)('A' + i)}");
             }
-            Console.WriteLine(); // Right vertical bar
+            Console.WriteLine();
 
-            // Print the vertical bars with one space in the middle of the cell
-            for (int j = 0; j < COL_NUM; j++)
+            // Affichage du contenu de la grille
+            for (int i = 0; i < nombreRangees; i++)
             {
-                Console.Write($"{CHAR_VER}{tableau[iterations]}{CHAR_VER}"); // One space in the middle of the cell
+                // Ligne horizontale
+                for (int j = 0; j < nombreColonnes; j++)
+                {
+                    Console.Write($"{CharHorizontal}{CharHorizontal}");
+                }
+                Console.WriteLine(CharHorizontal);
+
+                // Contenu des cellules
+                for (int j = 0; j < nombreColonnes; j++)
+                {
+                    Console.Write($"{CharVertical}{grille[i, j]}");
+                }
+                Console.WriteLine(CharVertical);
             }
-            Console.WriteLine(); // Right vertical bar
 
-            iterations++;
+            // Dernière ligne horizontale
+            for (int j = 0; j < nombreColonnes; j++)
+            {
+                Console.Write($"{CharHorizontal}{CharHorizontal}");
+            }
+            Console.WriteLine(CharHorizontal);
         }
 
-        // Print the bottom separator line after the last row
-        for (int j = 0; j < COL_NUM; j++)
+        /// <summary>
+        /// Demande et retourne l'action du joueur
+        /// </summary>
+        /// <param name="joueur">Numéro du joueur actuel (1 ou 2)</param>
+        /// <returns>Caractère représentant la colonne choisie</returns>
+        public static char DemanderAction(int joueur)
         {
-            Console.Write($"{CHAR_HOR}{CHAR_HOR}{CHAR_HOR}"); // Horizontal bars
+            Console.Write($"Au tour du joueur {joueur} de jouer.\nEntrez une colonne (A-G) : ");
+            ConsoleKeyInfo saisie = Console.ReadKey();
+            return char.ToLower(saisie.KeyChar); // Conversion en minuscule
         }
-        Console.WriteLine(); // Right vertical bar
     }
-
-
 }
